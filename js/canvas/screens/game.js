@@ -22,10 +22,34 @@ class Game extends Screen{
     this.level = 5;
     this.board = [];
     this.returnToMainScreen = false;
+    this.needsUpdate = true;
   }
 
   draw() {
+    if(this.returnToMainScreen) {
+      setTimeout(()=> {
+        this.screenHandler.loadScreen("mainMenu", this.level);
+      }, 1);
+      return;
+    }
+    if(!this.needsUpdate) {
+      this.context.fillStyle = "black";
+      this.context.fillRect(0, 0, 400, 120);
+      this.context.font = "96px Arial";
+      this.context.fillStyle = "white";
+      this.context.textAlign = "left";
+      this.context.fillText(((Date.now() - this.timer)/1000).toString(), 50, 100);
+      setTimeout(() => {this.draw();}, 50);
+      return;
+    }
+
     super.draw();
+    this.needsUpdate = false;
+
+    this.context.font = "96px Arial";
+    this.context.fillStyle = "white";
+    this.context.textAlign = "left";
+    this.context.fillText(((Date.now() - this.timer)/1000).toString(), 50, 100);
 
     let pairList = this.generatePairs();
     if(Game.isSolved(pairList)) {
@@ -34,18 +58,6 @@ class Game extends Screen{
       }, 1);
       return;
     }
-    if(this.returnToMainScreen) {
-      setTimeout(()=> {
-        this.screenHandler.loadScreen("mainMenu", this.level);
-      }, 1);
-      return;
-    }
-
-
-    this.context.font = "96px Arial";
-    this.context.fillStyle = "white";
-    this.context.textAlign = "left";
-    this.context.fillText(((Date.now() - this.timer)/1000).toString(), 50, 100);
 
     this.context.fillStyle = "blue";
     this.context.fillRect(550,30,200,75);
@@ -68,6 +80,7 @@ class Game extends Screen{
       this.context.fillRect( leftLine + length * (i % this.level) + 5 * (i % this.level + 1), baseLine + length * Math.floor(i / this.level) + 5 * (i / this.level) , length, length);
       let temp = i;
       this.actionHandler.addAction(leftLine + length * (i % this.level) + 5 * (i % this.level + 1), baseLine + length * Math.floor(i / this.level) + 5 * (i / this.level) , length, length, () => {
+        this.needsUpdate = true;
         this.board[temp] = (this.board[temp] + 1) % limits[this.level];
       });
     }
@@ -103,6 +116,7 @@ class Game extends Screen{
       return;
     }
     this.returnToMainScreen = false;
+    this.needsUpdate = true;
     setTimeout(() => {this.draw();}, 1);
   }
 

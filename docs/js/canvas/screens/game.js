@@ -6,7 +6,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var limits = {
+[1, 2, 3].map(function (n) {
+  return n + 1;
+});var limits = {
   '3': 5,
   '4': 7,
   '5': 9,
@@ -36,13 +38,39 @@ var Game = function (_Screen) {
     _this.level = 5;
     _this.board = [];
     _this.returnToMainScreen = false;
+    _this.needsUpdate = true;
     return _this;
   }
 
   Game.prototype.draw = function draw() {
     var _this2 = this;
 
+    if (this.returnToMainScreen) {
+      setTimeout(function () {
+        _this2.screenHandler.loadScreen("mainMenu", _this2.level);
+      }, 1);
+      return;
+    }
+    if (!this.needsUpdate) {
+      this.context.fillStyle = "black";
+      this.context.fillRect(0, 0, 400, 120);
+      this.context.font = "96px Arial";
+      this.context.fillStyle = "white";
+      this.context.textAlign = "left";
+      this.context.fillText(((Date.now() - this.timer) / 1000).toString(), 50, 100);
+      setTimeout(function () {
+        _this2.draw();
+      }, 50);
+      return;
+    }
+
     _Screen.prototype.draw.call(this);
+    this.needsUpdate = false;
+
+    this.context.font = "96px Arial";
+    this.context.fillStyle = "white";
+    this.context.textAlign = "left";
+    this.context.fillText(((Date.now() - this.timer) / 1000).toString(), 50, 100);
 
     var pairList = this.generatePairs();
     if (Game.isSolved(pairList)) {
@@ -51,17 +79,6 @@ var Game = function (_Screen) {
       }, 1);
       return;
     }
-    if (this.returnToMainScreen) {
-      setTimeout(function () {
-        _this2.screenHandler.loadScreen("mainMenu", _this2.level);
-      }, 1);
-      return;
-    }
-
-    this.context.font = "96px Arial";
-    this.context.fillStyle = "white";
-    this.context.textAlign = "left";
-    this.context.fillText(((Date.now() - this.timer) / 1000).toString(), 50, 100);
 
     this.context.fillStyle = "blue";
     this.context.fillRect(550, 30, 200, 75);
@@ -87,6 +104,7 @@ var Game = function (_Screen) {
       _this2.context.fillRect(leftLine + length * (i % _this2.level) + 5 * (i % _this2.level + 1), baseLine + length * Math.floor(i / _this2.level) + 5 * (i / _this2.level), length, length);
       var temp = i;
       _this2.actionHandler.addAction(leftLine + length * (i % _this2.level) + 5 * (i % _this2.level + 1), baseLine + length * Math.floor(i / _this2.level) + 5 * (i / _this2.level), length, length, function () {
+        _this2.needsUpdate = true;
         _this2.board[temp] = (_this2.board[temp] + 1) % limits[_this2.level];
       });
     };
@@ -129,6 +147,7 @@ var Game = function (_Screen) {
       return;
     }
     this.returnToMainScreen = false;
+    this.needsUpdate = true;
     setTimeout(function () {
       _this3.draw();
     }, 1);
