@@ -4,8 +4,8 @@ class ScreenHandler{
     this.context = this.canvas.getContext("2d");
     this.actionHandler = actionHandler;
     this.screens = {};
-    this.canvas.addEventListener('click', function(e) {this.clickAction(e);}, false);
-    this.canvas.addEventListener('contextmenu', function(e) {this.clickAction(e);}, false);
+    this.canvas.addEventListener('click', (e) => {this.clickAction(e);}, false);
+    this.canvas.addEventListener('contextmenu', (e) => {this.clickAction(e);}, false);
   }
   clickAction(e) {
     e.preventDefault();
