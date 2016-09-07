@@ -101,9 +101,9 @@ var Game = function (_Screen) {
 
     var _loop = function _loop(i) {
       _this2.context.fillStyle = colors[_this2.board[i]];
-      _this2.context.fillRect(leftLine + length * (i % _this2.level) + 5 * (i % _this2.level + 1), baseLine + length * Math.floor(i / _this2.level) + 5 * (i / _this2.level), length, length);
+      _this2.context.fillRect(leftLine + length * (i % _this2.level) + 5 * (i % _this2.level + 1), baseLine + length * Math.floor(i / _this2.level) + 5 * Math.floor(i / _this2.level), length, length);
       var temp = i;
-      _this2.actionHandler.addAction(leftLine + length * (i % _this2.level) + 5 * (i % _this2.level + 1), baseLine + length * Math.floor(i / _this2.level) + 5 * (i / _this2.level), length, length, function () {
+      _this2.actionHandler.addAction(leftLine + length * (i % _this2.level) + 5 * (i % _this2.level + 1), baseLine + length * Math.floor(i / _this2.level) + 5 * Math.floor(i / _this2.level), length, length, function () {
         _this2.needsUpdate = true;
         _this2.board[temp] = (_this2.board[temp] + 1) % limits[_this2.level];
       });

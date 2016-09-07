@@ -77,9 +77,9 @@ class Game extends Screen{
     // draw squares
     for(let i = 0; i < numberOfPlaces; ++i) {
       this.context.fillStyle = colors[this.board[i]];
-      this.context.fillRect( leftLine + length * (i % this.level) + 5 * (i % this.level + 1), baseLine + length * Math.floor(i / this.level) + 5 * (i / this.level) , length, length);
+      this.context.fillRect( leftLine + length * (i % this.level) + 5 * (i % this.level + 1), baseLine + length * Math.floor(i / this.level) + 5 * Math.floor(i / this.level) , length, length);
       let temp = i;
-      this.actionHandler.addAction(leftLine + length * (i % this.level) + 5 * (i % this.level + 1), baseLine + length * Math.floor(i / this.level) + 5 * (i / this.level) , length, length, () => {
+      this.actionHandler.addAction(leftLine + length * (i % this.level) + 5 * (i % this.level + 1), baseLine + length * Math.floor(i / this.level) + 5 * Math.floor(i / this.level) , length, length, () => {
         this.needsUpdate = true;
         this.board[temp] = (this.board[temp] + 1) % limits[this.level];
       });
